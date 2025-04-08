@@ -1,2 +1,3 @@
 rootProject.name = 'practice-spring-kafka'
 include 'practice-01'
+include 'practice-02'
