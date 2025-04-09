@@ -1,7 +1,5 @@
 package com.chanbinme.practice02.kafka;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import com.chanbinme.practice02.kafka.dto.DemoViewDTO1;
 import com.chanbinme.practice02.kafka.dto.DemoViewDTO2;
 import java.util.concurrent.TimeUnit;
@@ -36,16 +34,19 @@ class KafkaConsumerTest {
             .age(30)
             .build();
 
-        int testCount = 0;
-        for (int i = 0; i < 10; i++) {
-            if (testCount % 2 == 0) {
-                kafkaProducer.sendMessage(topic, payload);
-            } else {
-                kafkaProducer.sendMessage(topic, payload2);
-            }
 
-            testCount++;
-        }
+        kafkaProducer.sendPayload(topic, payload);
+        kafkaProducer.sendPayload(topic, payload2);
+
+//        int testCount = 0;
+//        for (int i = 0; i < 10; i++) {
+//            if (testCount % 2 == 0) {
+//                kafkaProducer.sendPayload(topic, payload);
+//            } else {
+//                kafkaProducer.sendPayload(topic, payload2);
+//            }
+//            testCount++;
+//        }
 
         // 모든 메시지를 수신할 때까지 기다림
         kafkaConsumer.getLatch().await(10, TimeUnit.SECONDS);

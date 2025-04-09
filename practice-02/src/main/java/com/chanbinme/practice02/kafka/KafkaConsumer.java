@@ -4,19 +4,19 @@ import com.chanbinme.practice02.kafka.dto.DemoViewDTO1;
 import com.chanbinme.practice02.kafka.dto.DemoViewDTO2;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.concurrent.CountDownLatch;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.kafka.annotation.KafkaHandler;
 import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.kafka.support.KafkaHeaders;
+import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Component;
 
 @Component
 @Slf4j
 @Data
-@KafkaListener(groupId = "chanbinme-groupId", topics = "chanbinme-topic")
+@KafkaListener(groupId = "chanbinme-groupId", topics = "chanbinme-topic", containerFactory = "multiTypeKafkaListenerContainerFactory")
 public class KafkaConsumer {
 
     private CountDownLatch latch = new CountDownLatch(10);
@@ -24,15 +24,17 @@ public class KafkaConsumer {
     private Object payload;
 
     @KafkaHandler
-    public void handleDTO1(DemoViewDTO1 dto) {
-        log.info("Received DTO1: {}", dto);
+    public void handleDTO1(DemoViewDTO1 dto, @Header(KafkaHeaders.RECEIVED_TOPIC) String topic) {
+        log.info("Received message from topic {}: {}", topic, dto);
+//        log.info("Received DTO1: {}", dto);
         payloads.add(dto);
         latch.countDown();
     }
 
     @KafkaHandler
-    public void handleDTO2(DemoViewDTO2 dto) {
-        log.info("Received DTO2: {}", dto);
+    public void handleDTO2(DemoViewDTO2 dto, @Header(KafkaHeaders.RECEIVED_TOPIC) String topic) {
+        log.info("Received message from topic {}: {}", topic, dto);
+//        log.info("Received DTO2: {}", dto);
         payloads.add(dto);
         latch.countDown();
     }

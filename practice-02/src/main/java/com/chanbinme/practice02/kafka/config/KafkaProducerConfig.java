@@ -25,12 +25,13 @@ public class KafkaProducerConfig {
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
         props.put(JsonSerializer.TYPE_MAPPINGS,
-            "demoViewDTO1:com.chanbinme.practice02.kafka.dto.DemoViewDTO1, demoViewDTO2:com.chanbinme.practice02.kafka.dto.DemoViewDTO2");
+            "demoViewDTO1:com.chanbinme.practice02.kafka.dto.DemoViewDTO1, "
+                + "demoViewDTO2:com.chanbinme.practice02.kafka.dto.DemoViewDTO2");
         return new DefaultKafkaProducerFactory<>(props);
     }
 
     @Bean
-    public KafkaTemplate<String, Object> kafkaTemplate() {
+    public KafkaTemplate<String, Object> multiTypeKafkaTemplate() {
         return new KafkaTemplate<>(multiTypeProducerFactory());
     }
 }
