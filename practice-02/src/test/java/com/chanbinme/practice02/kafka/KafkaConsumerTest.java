@@ -34,19 +34,15 @@ class KafkaConsumerTest {
             .age(30)
             .build();
 
-
-        kafkaProducer.sendPayload(topic, payload);
-        kafkaProducer.sendPayload(topic, payload2);
-
-//        int testCount = 0;
-//        for (int i = 0; i < 10; i++) {
-//            if (testCount % 2 == 0) {
-//                kafkaProducer.sendPayload(topic, payload);
-//            } else {
-//                kafkaProducer.sendPayload(topic, payload2);
-//            }
-//            testCount++;
-//        }
+        int testCount = 0;
+        for (int i = 0; i < 10; i++) {
+            if (testCount % 2 == 0) {
+                kafkaProducer.sendPayload(topic, payload);
+            } else {
+                kafkaProducer.sendPayload(topic, payload2);
+            }
+            testCount++;
+        }
 
         // 모든 메시지를 수신할 때까지 기다림
         kafkaConsumer.getLatch().await(10, TimeUnit.SECONDS);

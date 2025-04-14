@@ -17,9 +17,7 @@ import org.springframework.kafka.support.converter.RecordMessageConverter;
 import org.springframework.kafka.support.converter.StringJsonMessageConverter;
 import org.springframework.kafka.support.mapping.DefaultJackson2JavaTypeMapper;
 import org.springframework.kafka.support.mapping.Jackson2JavaTypeMapper.TypePrecedence;
-import org.springframework.kafka.support.serializer.ErrorHandlingDeserializer;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
-import org.springframework.kafka.support.serializer.JsonSerializer;
 
 @EnableKafka
 @Configuration
@@ -44,8 +42,7 @@ public class KafkaConsumerConfig {
 
     @Bean
     public ConcurrentKafkaListenerContainerFactory<String, Object> multiTypeKafkaListenerContainerFactory() {
-        ConcurrentKafkaListenerContainerFactory<String, Object> factory =
-            new ConcurrentKafkaListenerContainerFactory<>();
+        ConcurrentKafkaListenerContainerFactory<String, Object> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(multiTypeConsumerFactory());
         factory.setRecordMessageConverter(multiTypeConverter());
         return factory;
@@ -56,13 +53,15 @@ public class KafkaConsumerConfig {
         StringJsonMessageConverter converter = new StringJsonMessageConverter();
         DefaultJackson2JavaTypeMapper typeMapper = new DefaultJackson2JavaTypeMapper();
         typeMapper.setTypePrecedence(TypePrecedence.TYPE_ID);
-        typeMapper.addTrustedPackages("com.chanbinme.practice02.kafka.dto");
+
         Map<String, Class<?>> mappings = new HashMap<>();
         mappings.put("demoViewDTO1", DemoViewDTO1.class);
         mappings.put("demoViewDTO2", DemoViewDTO2.class);
-        typeMapper.setIdClassMapping(mappings);
-        converter.setTypeMapper(typeMapper);
 
+        typeMapper.setIdClassMapping(mappings);
+        typeMapper.addTrustedPackages("com.chanbinme.practice02.kafka.dto");
+
+        converter.setTypeMapper(typeMapper);
         return converter;
     }
 }
